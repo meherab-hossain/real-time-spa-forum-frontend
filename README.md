@@ -1,4 +1,4 @@
-# basic
+# forum
 
 ## Project setup
 ```

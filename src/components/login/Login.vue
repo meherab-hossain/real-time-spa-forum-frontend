@@ -35,7 +35,6 @@
 </template>
 
 <script>
-    import axios from 'axios'
     export default {
         name: "AppHome",
         data(){
@@ -48,10 +47,86 @@
         },
         methods:{
             login(){
+                let that=this
                 // eslint-disable-next-line no-console
-                axios.post('/api/auth/login', this.form).then(res =>console.log(res.data) )
+                that.$axios.post('http://127.0.0.1:8000/api/auth/login', this.form)
+                // eslint-disable-next-line no-console
+                    .then(res => {
+                        that.responseAfterLogin(res)
+                    })
                 // eslint-disable-next-line no-console
                     .catch(err=>console.log(err.response.data))
+            },
+            responseAfterLogin(res){
+                const access_token=res.data.access_token
+                const username=res.data.user
+                if(this.isValid(access_token)){
+                    this.store(access_token,username)
+                }
+            },
+            //token store set and get part
+            storeToken(token){
+                localStorage.setItem('token',token)
+            },
+            storeUser(user){
+                localStorage.setItem('user',user)
+            },
+            store(token,user){
+                this.storeToken(token)
+                this.storeUser(user)
+            },
+            clear(){
+                localStorage.removeItem('token')
+                localStorage.removeItem('user')
+            },
+            getToken(){
+                return localStorage.getItem('token')
+            },
+            getUser(){
+                return localStorage.getItem('user')
+            },
+
+            //token payload decode and validation
+
+            isValid(token){
+                const payload=this.payload(token)
+                if(payload){
+                    return payload.iss === "http://127.0.0.1:8000/api/auth/login"
+                }
+                return false
+            },
+            payload(token){
+                const payload=token.split('.')[1]
+                return this.decode(payload)
+            },
+            decode(payload){
+                return JSON.parse(atob(payload))
+            },
+
+            //to verify user logged in use has token or not
+            hasToken(){
+                const storeToken=this.getToken();
+                if(storeToken){
+                    return this.isValid(storeToken) ? true : false
+                }
+                return false
+            },
+            loggedIn(){
+                return this.hasToken()
+            },
+            loggedOut(){
+                return this.clear()
+            },
+            userName(){
+                if(this.loggedIn()){
+                    return this.getUser()
+                }
+            },
+            userId(){
+              if(this.loggedIn()){
+                  const payload=this.payload(this.getToken())
+                  return payload.sub
+              }
             }
         }
     }

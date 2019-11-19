@@ -15,11 +15,11 @@ export default new Router({
     mode: 'history',
     base: process.env.BASE_URL,
     routes: [
-        {
+        /*{
             path: '/',
             name: 'forum',
             component: Forum
-        },
+        },*/
         {
             path: '/login',
             name: 'login',

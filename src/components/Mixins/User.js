@@ -1,6 +1,7 @@
 /* eslint-disable */
 import Token from "./Token";
 import AppStorage from "./AppStorage";
+import EventBus from "./EventBus";
 export default {
 
     mixins:[Token,AppStorage],
@@ -9,6 +10,7 @@ export default {
             // eslint-disable-next-line no-console
             this.$axios.post('http://127.0.0.1:8000/api/auth/login', data).then(res =>{
                 this.responseAfterLogin(res)
+                EventBus.$emit('login')
             } )
 
             .catch(err=>{

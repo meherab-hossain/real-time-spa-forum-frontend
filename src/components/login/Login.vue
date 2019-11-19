@@ -61,7 +61,6 @@
         methods:{
             login(){
                 this.user(this.form)
-                this.$router.push('/forum')
                 }
         }
     }

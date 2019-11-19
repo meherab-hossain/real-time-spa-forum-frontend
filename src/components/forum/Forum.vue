@@ -10,7 +10,10 @@
 
                    </Question>
                </v-flex>
-                   Sidebar
+               <v-flex xs4>
+                   <AppSidebar></AppSidebar>
+               </v-flex>
+
            </v-layout>
         </v-container>
 </template>
@@ -19,9 +22,10 @@
     /* eslint-disable */
 
     import Question from "./Question";
+    import AppSidebar from "./AppSidebar";
     export default {
         name: "Forum",
-        components: {Question},
+        components: {Question, AppSidebar},
         data(){
             return{
                 questions:{}

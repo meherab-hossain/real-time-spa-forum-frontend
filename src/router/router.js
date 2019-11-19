@@ -7,6 +7,7 @@ import Logout from "../components/login/Logout";
 
 import FetchSingleQuestion from "../components/forum/FetchSingleQuestion";
 import AskQuestion from "../components/forum/AskQuestion";
+import CreateCategory from "../components/category/CreateCategory";
 
 
 Vue.use(Router)
@@ -49,6 +50,11 @@ export default new Router({
             path: '/ask',
             name: 'AskQuestion',
             component: AskQuestion
+        },
+        {
+            path: '/category',
+            name: 'Category',
+            component: CreateCategory
         }
     ]
 })

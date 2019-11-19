@@ -8,7 +8,7 @@
                     type="text"
                     required
             ></v-text-field>
-
+            {{form.category_id}}
             <v-select
                     :items="categories"
                     item-text="name"
@@ -30,7 +30,7 @@
 
 <script>
     /* eslint-disable */
-
+   import md from 'marked'
     export default {
         data(){
             return {
@@ -39,21 +39,28 @@
                     category_id:null,
                     body:null
                 },
-                categories:{},
+                categories:[],
                 errors:{}
             }
         },
         created(){
-            this.$axios.get('http://127.0.0.1:8000/api/category')
-                .then(res => this.categories = res.data.data)
+            this.categoryFetch()
         },
         methods:{
             create(){
-                this.$axios.post('http://127.0.0.1:8000/api/question',this.form)
+               return  this.$axios.post('http://127.0.0.1:8000/api/question',this.form)
                     .then(res => {
                         this.$router.push(res.data.path)
+                        return res
                     })
-                    .catch(error => this.errors = error.response.data.error)
+                    .catch(error =>{
+                        this.errors = error.response.data.error
+                        return Promise.reject(error)
+                    })
+            },
+            categoryFetch(){
+                this.$axios.get('http://127.0.0.1:8000/api/category')
+                    .then(res => this.categories = res.data.data)
             }
         }
     }

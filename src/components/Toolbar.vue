@@ -2,7 +2,7 @@
     <div>
         <v-card height="60px" flat tile color="gray-light-4">
             <v-toolbar dense>
-                <v-toolbar-title>Forum Page{{(isLogged)}}</v-toolbar-title>
+                <v-toolbar-title>Forum Page</v-toolbar-title>
 
                 <v-spacer></v-spacer>
                 <!-- <router-link tag="span" to="/forum">

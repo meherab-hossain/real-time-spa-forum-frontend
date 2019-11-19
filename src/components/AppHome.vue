@@ -9,13 +9,16 @@
 <script>
     import Toolbars from './Toolbar.vue';
     import AppFooter from './AppFooter.vue';
+    import testToken from "./Mixins/testToken";
 
     export default {
         name: 'AppHome',
+        mixins:[testToken],
         components: {
             Toolbars,
-            AppFooter
+            AppFooter,
         },
+
     };
 </script>
 

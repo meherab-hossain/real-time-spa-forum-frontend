@@ -1,6 +1,8 @@
+/* eslint-disable */
 import Token from "./Token";
 import AppStorage from "./AppStorage";
 export default {
+
     mixins:[Token,AppStorage],
     methods:{
         user(data){
@@ -8,8 +10,10 @@ export default {
             this.$axios.post('http://127.0.0.1:8000/api/auth/login', data).then(res =>{
                 this.responseAfterLogin(res)
             } )
-            // eslint-disable-next-line no-console
-            .catch(err=>console.log(err.response.data))
+
+            .catch(err=>{
+                console.log(err.response.data)
+            })
         },
         responseAfterLogin(res){
             const access_token=res.data.access_token
@@ -45,6 +49,13 @@ export default {
                 const payload=this.payload(this.getToken())
                 return payload.sub
             }
+        },
+        userQuestion(id){
+            if(this.userId()===id){
+                return true
+            }else{
+                 return false
+             }
         }
     }
 }

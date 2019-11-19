@@ -5,6 +5,9 @@ import SignUp from '../components/login/SignUp.vue'
 import Forum from '../components/forum/Forum'
 import Logout from "../components/login/Logout";
 
+import FetchSingleQuestion from "../components/forum/FetchSingleQuestion";
+import AskQuestion from "../components/forum/AskQuestion";
+
 
 Vue.use(Router)
 
@@ -12,6 +15,11 @@ export default new Router({
     mode: 'history',
     base: process.env.BASE_URL,
     routes: [
+        {
+            path: '/',
+            name: 'forum',
+            component: Forum
+        },
         {
             path: '/login',
             name: 'login',
@@ -23,14 +31,24 @@ export default new Router({
             component: SignUp
         },
         {
+            path: '/logout',
+            name: 'Logout',
+            component: Logout
+        },
+        {
             path: '/forum',
             name: 'Forum',
             component: Forum
         },
         {
-            path: '/logout',
-            name: 'Logout',
-            component: Logout
+            path: '/question/:slug',
+            name: 'SingleQuestion',
+            component: FetchSingleQuestion
+        },
+        {
+            path: '/ask',
+            name: 'AskQuestion',
+            component: AskQuestion
         }
     ]
 })

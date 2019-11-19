@@ -20,15 +20,21 @@
                 <router-link tag="span" to="/forum" v-if="shows">
                     <v-btn text>Logged out</v-btn>
                 </router-link>-->
-                <div v-if="shows">
-                    <v-btn text  v-for="item in authMenu" :key="item.title" :to="item.to">
-                        {{item.title}}
-                    </v-btn>
-                </div>
+                <template v-if="shows">
+                    <template v-for="item in authMenu">
+                        <v-btn  text :key="item.title" :to="item.to">
+                            {{item.title}}
 
-                    <v-btn v-else text  v-for="item in unAuthMenu" :key="item.title" :to="item.to">
-                        {{item.title}}
-                    </v-btn>
+                        </v-btn>
+                    </template>
+                </template>
+                <template v-if="!shows">
+                    <template v-for="item in unAuthMenu" >
+                        <v-btn text   :key="item.title" :to="item.to">
+                            {{item.title}}
+                        </v-btn>
+                    </template>
+                </template>
             </v-toolbar>
         </v-card>
     </div>
@@ -77,13 +83,6 @@
         },
         methods: {
 
-        },
-        watch:{
-            shows:{
-                handler(v){
-                    this.shows=v
-                }
-            }
         }
     }
 </script>

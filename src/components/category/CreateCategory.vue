@@ -35,7 +35,7 @@
                             <v-list-item >
                                 <v-list-item-action>
                                     <v-btn icon small >
-                                        <v-icon color="orange" class="material-icons" @click="edit(index)">edit</v-icon>
+                                        <v-icon color="orange" class="material-icons" @click="edit(category,index)">edit</v-icon>
                                     </v-btn>
                                 </v-list-item-action>
                                 <v-list-item-content>
@@ -67,14 +67,17 @@
 <script>
     /* eslint-disable */
     import Dialog from "../commonComponent/Dialog";
+    import User from "../Mixins/User";
+
     export default {
         name: "CreateCategory",
+        mixins:[User],
         data() {
             return {
                 form:{
                     name: null
                 },
-                categories:{},
+                categories:[],
                 dialog:false,
                 slug:null,
                 index:null,
@@ -84,6 +87,9 @@
         },
         components:{Dialog},
         created(){
+            if (!this.admin()){
+                this.$router.push('/forum')
+            }
             this.categoryFetch()
         },
         computed:{
@@ -129,7 +135,10 @@
                 // eslint-disable-next-line,no-unused-vars
                     .then(res => {
                         console.log(res)
-                        this.categories.unshift(res.data)
+                        this.categories.push(res.data)
+                        console.log(this.categories)
+                        this.categories=this.getUniqueListBy(this.categories,'id')
+                        //console.log(this.categories)
                         this.$refs.categoryForm.reset()
 
                     })
@@ -139,10 +148,16 @@
                 this.index=index
                 this.dialog=true
             },
-            edit(index){
-                this.form.name=this.categories[index].name
-                this.editSlug=this.categories[index].slug
-                this.categories.splice(index,1)
+            edit(category,index){
+                this.form.name=category.name
+                this.editSlug=category.slug
+                //this.categories.splice(index,1)
+               //console.log([...new Set(this.categories)]) //.splice(index,1)
+
+            },
+            getUniqueListBy(arr, key) {
+                // https://stackoverflow.com/questions/2218999/remove-duplicates-from-an-array-of-objects-in-javascript
+                return [...new Map(arr.map(item => [item[key], item])).values()]
             }
 
         }

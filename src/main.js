@@ -14,7 +14,6 @@ window.$axios.defaults.headers.common['Authorization']=token
 */
 router.beforeEach((to,from,next)=>{
   axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('token')
-
   next()
 })
 Vue.config.productionTip = false

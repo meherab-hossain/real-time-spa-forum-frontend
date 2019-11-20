@@ -2,7 +2,7 @@
     <v-container>
         <v-row>
             <v-col cols="8">
-                <v-form ref="categoryForm" @submit.prevent="create">
+                <v-form ref="categoryForm" @submit.prevent="submit">
                     <v-text-field
                             label="category name"
                             v-model="form.name"
@@ -10,6 +10,13 @@
                             required
                     ></v-text-field>
                     <v-btn
+                            v-if="editSlug"
+                            color="teal"
+                            type="submit"
+                    >update
+                    </v-btn>
+                    <v-btn
+                            v-else
                             color="teal"
                             type="submit"
                     >Create
@@ -28,7 +35,7 @@
                             <v-list-item >
                                 <v-list-item-action>
                                     <v-btn icon small >
-                                        <v-icon color="orange" class="material-icons">edit</v-icon>
+                                        <v-icon color="orange" class="material-icons" @click="edit(index)">edit</v-icon>
                                     </v-btn>
                                 </v-list-item-action>
                                 <v-list-item-content>
@@ -70,17 +77,37 @@
                 categories:{},
                 dialog:false,
                 slug:null,
-                index:null
+                index:null,
+                errors:null,
+                editSlug:null
             }
         },
         components:{Dialog},
         created(){
-            this.$axios.get('http://127.0.0.1:8000/api/category')
-                .then(res => this.categories = res.data.data)
+            this.categoryFetch()
+        },
+        computed:{
+            /*e :function(){
+                return this.editSlug
+             }*/
         },
         methods: {
+            categoryFetch(){
+                return this.$axios.get('http://127.0.0.1:8000/api/category')
+                    .then(res => {
+                        this.categories = res.data.data
+                        return res
+                    })
+                    .catch(error=>{
+                        this.errors=error.response.data.error
+                        return Promise.reject(error)
+                    })
+            },
+            submit(){
+                this.editSlug? this.update():this.create()
+            },
             create() {
-                this.$axios.post('http://127.0.0.1:8000/api/category', this.form)
+                return  this.$axios.post('http://127.0.0.1:8000/api/category', this.form)
                 // eslint-disable-next-line,no-unused-vars
                     .then(res => {
                         console.log(res)
@@ -97,10 +124,25 @@
                         this.categories.splice(this.index,1)
                     })
             },
+            update(){
+                return  this.$axios.patch(`http://127.0.0.1:8000/api/category/${this.editSlug}`, this.form)
+                // eslint-disable-next-line,no-unused-vars
+                    .then(res => {
+                        console.log(res)
+                        this.categories.unshift(res.data)
+                        this.$refs.categoryForm.reset()
+
+                    })
+            },
             dialogeMethod(slug,index){
                 this.slug=slug
                 this.index=index
                 this.dialog=true
+            },
+            edit(index){
+                this.form.name=this.categories[index].name
+                this.editSlug=this.categories[index].slug
+                this.categories.splice(index,1)
             }
 
         }

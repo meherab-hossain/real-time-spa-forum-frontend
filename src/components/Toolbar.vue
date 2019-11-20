@@ -78,7 +78,6 @@
         },
         methods: {
             checkIfIsLogged() {
-
                 if (this.getToken()) {
                     return true
                 } else {

@@ -1,34 +1,12 @@
 <template>
     <v-container>
         <v-row>
-            <v-col cols="8">
-                <v-form ref="categoryForm" @submit.prevent="submit">
-                    <v-text-field
-                            label="category name"
-                            v-model="form.name"
-                            type="text"
-                            required
-                    ></v-text-field>
-                    <v-btn
-                            v-if="editSlug"
-                            color="teal"
-                            type="submit"
-                    >update
-                    </v-btn>
-                    <v-btn
-                            v-else
-                            color="teal"
-                            type="submit"
-                    >Create
-                    </v-btn>
-                </v-form>
-            </v-col>
-        </v-row>
-        <v-row>
             <v-col cols="10">
                 <v-card >
                     <v-toolbar color="indigo" dense dark class="mt-1">
                         <v-toolbar-title>Category</v-toolbar-title>
+                        <v-spacer></v-spacer>
+                        <v-btn @click="categoryDialog=true">create new category</v-btn>
                     </v-toolbar>
                     <v-list class="pa-3" tile>
                         <div v-for="(category,index) in categories" :key="category.id">
@@ -61,6 +39,44 @@
         >
             <Dialog @destroy="destroy" @cancelDialog="dialog=false"></Dialog>
         </v-dialog>
+
+        <template>
+            <v-row justify="center">
+                <v-dialog
+                        v-model="categoryDialog"
+                        max-width="400"
+                >
+                    <v-card>
+                        <v-form ref="categoryForm" @submit.prevent="editMode?update():create()">
+                            <v-text-field
+                                    label="category name"
+                                    v-model="form.name"
+                                    type="text"
+                                    required
+                            ></v-text-field>
+                            <v-card-actions>
+                                <v-spacer></v-spacer>
+
+                                <v-btn
+                                        color="green darken-1"
+                                        text
+                                        @click="closeModal"
+                                >
+                                    cancel
+                                </v-btn>
+
+                                <v-btn
+                                        color="green darken-1"
+                                        type="submit"
+                                >
+                                    {{editMode?'update':'create'}}
+                                </v-btn>
+                            </v-card-actions>
+                        </v-form>
+                    </v-card>
+                </v-dialog>
+            </v-row>
+        </template>
     </v-container>
 </template>
 
@@ -82,7 +98,9 @@
                 slug:null,
                 index:null,
                 errors:null,
-                editSlug:null
+                editSlug:null,
+                editMode:false,
+                categoryDialog:false
             }
         },
         components:{Dialog},
@@ -109,10 +127,11 @@
                         return Promise.reject(error)
                     })
             },
-            submit(){
-                this.editSlug? this.update():this.create()
-            },
+            /*submit(){
+                this.editMode? this.update():this.create()
+            },*/
             create() {
+                this.categoryDialog=false
                 return  this.$axios.post('http://127.0.0.1:8000/api/category', this.form)
                 // eslint-disable-next-line,no-unused-vars
                     .then(res => {
@@ -131,6 +150,7 @@
                     })
             },
             update(){
+                this.categoryDialog=false
                 return  this.$axios.patch(`http://127.0.0.1:8000/api/category/${this.editSlug}`, this.form)
                 // eslint-disable-next-line,no-unused-vars
                     .then(res => {
@@ -140,7 +160,7 @@
                         this.categories=this.getUniqueListBy(this.categories,'id')
                         //console.log(this.categories)
                         this.$refs.categoryForm.reset()
-
+                        this.editMode=false
                     })
             },
             dialogeMethod(slug,index){
@@ -151,6 +171,8 @@
             edit(category,index){
                 this.form.name=category.name
                 this.editSlug=category.slug
+                this.editMode=true
+                this.categoryDialog=true
                 //this.categories.splice(index,1)
                //console.log([...new Set(this.categories)]) //.splice(index,1)
 
@@ -158,6 +180,11 @@
             getUniqueListBy(arr, key) {
                 // https://stackoverflow.com/questions/2218999/remove-duplicates-from-an-array-of-objects-in-javascript
                 return [...new Map(arr.map(item => [item[key], item])).values()]
+            },
+            closeModal(){
+                this.categoryDialog = false
+                this.editMode=false
+                this.$refs.categoryForm.reset()
             }
 
         }

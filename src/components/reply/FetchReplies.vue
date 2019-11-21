@@ -1,5 +1,5 @@
 <template>
-    <div class="pl-4 ma-2">
+    <div class="pl-4 ma-2" v-if="replies">
         <ShowReply
                 v-for="reply in replies"
                 :key="reply.id"

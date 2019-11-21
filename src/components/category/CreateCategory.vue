@@ -46,6 +46,7 @@
                         v-model="categoryDialog"
                         class="pa-4"
                         max-width="400"
+                        persistent
                 >
                     <v-card>
                         <div>

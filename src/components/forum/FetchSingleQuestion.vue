@@ -1,5 +1,5 @@
 <template>
-    <div v-if="singleQuestion">
+    <div class="ma-2" v-if="singleQuestion">
         <EditQuestion
                 :data="singleQuestion"
                 v-if="editing">
@@ -10,16 +10,20 @@
                 v-else
                 :data="singleQuestion"
         />
+
+        <FetchReplies :replies="singleQuestion.replies"></FetchReplies>
+
     </div>
 </template>
 
 <script>
     import EditQuestion from "./EditQuestion";
     import ShowSingleQuestion from "./ShowSingleQuestion";
+    import FetchReplies from "../reply/FetchReplies";
     import EventBus from "../Mixins/EventBus";
     export default {
         name: "FetchSingleQuestion",
-        components: {EditQuestion, ShowSingleQuestion},
+        components: {EditQuestion, ShowSingleQuestion,FetchReplies},
         data(){
             return{
                 singleQuestion:{},

@@ -5,7 +5,7 @@
             <v-card-title class="headline mb-0">
                 {{data.title}}
                 <v-spacer></v-spacer>
-                <v-btn class="teal"> 5 Replies</v-btn>
+                <v-btn class="teal">{{data.reply_count}}</v-btn>
             </v-card-title>
 
             <v-card-subtitle>

@@ -13,7 +13,7 @@
                             <v-list-item >
                                 <v-list-item-action>
                                     <v-btn icon small >
-                                        <v-icon color="orange" class="material-icons" @click="edit(category,index)">edit</v-icon>
+                                        <v-icon color="orange" class="material-icons" @click="edit(category)">edit</v-icon>
                                     </v-btn>
                                 </v-list-item-action>
                                 <v-list-item-content>
@@ -40,18 +40,24 @@
             <Dialog @destroy="destroy" @cancelDialog="dialog=false"></Dialog>
         </v-dialog>
 
-        <template>
-            <v-row justify="center">
+
+
                 <v-dialog
                         v-model="categoryDialog"
                         class="pa-4"
                         max-width="400"
                         persistent
                 >
-                    <v-card>
+                    <CreateCategoryDialog ref="categoryForm"
+                                          :editMode="editMode"
+                                          @closeModal="closeModal" @create="create"
+                                          @update="update">
+
+                    </CreateCategoryDialog>
+                    <!--<v-card>
                         <div>
                             <v-flex class="ma-2">
-                                <v-form ref="categoryForm" @submit.prevent="editMode?update():create()">
+                                <v-form ref="categoryFormDialog" @submit.prevent="editMode?update():create()">
                                     <v-text-field
                                             color="pink"
                                             label="category name"
@@ -80,10 +86,10 @@
                                 </v-form>
                             </v-flex>
                         </div>
-                    </v-card>
+                    </v-card>-->
                 </v-dialog>
-            </v-row>
-        </template>
+
+
     </v-container>
 </template>
 
@@ -91,6 +97,8 @@
     /* eslint-disable */
     import Dialog from "../commonComponent/Dialog";
     import User from "../Mixins/User";
+    import CreateCategoryDialog from "../commonComponent/CreateCategoryDialog";
+    import EventBus from "../Mixins/EventBus";
 
     export default {
         name: "CreateCategory",
@@ -107,21 +115,16 @@
                 errors:null,
                 editSlug:null,
                 editMode:false,
-                categoryDialog:false
+                categoryDialog:false,
+
             }
         },
-        components:{Dialog},
+        components:{CreateCategoryDialog, Dialog},
         created(){
             if (!this.admin()){
                 this.$router.push('/forum')
             }
             this.categoryFetch()
-        },
-
-        computed:{
-            /*e :function(){
-                return this.editSlug
-             }*/
         },
         methods: {
             categoryFetch(){
@@ -138,14 +141,14 @@
             /*submit(){
                 this.editMode? this.update():this.create()
             },*/
-            create() {
+            create(form) {
                 this.categoryDialog=false
-                return  this.$axios.post('http://127.0.0.1:8000/api/category', this.form)
+                return  this.$axios.post('http://127.0.0.1:8000/api/category', form)
                 // eslint-disable-next-line,no-unused-vars
                     .then(res => {
                         console.log(res)
                         this.categories.unshift(res.data)
-                        this.$refs.categoryForm.reset()
+
 
                     })
             },
@@ -157,9 +160,9 @@
                         this.categories.splice(this.index,1)
                     })
             },
-            update(){
+            update(editslug,form){
                 this.categoryDialog=false
-                return  this.$axios.patch(`http://127.0.0.1:8000/api/category/${this.editSlug}`, this.form)
+                return  this.$axios.patch(`http://127.0.0.1:8000/api/category/${editslug}`, form)
                 // eslint-disable-next-line,no-unused-vars
                     .then(res => {
                         console.log(res)
@@ -167,7 +170,7 @@
                         console.log(this.categories)
                         this.categories=this.getUniqueListBy(this.categories,'id')
                         //console.log(this.categories)
-                        this.$refs.categoryForm.reset()
+                        //this.$refs.categoryFormDialog.reset()
                         this.editMode=false
                     })
             },
@@ -176,11 +179,19 @@
                 this.index=index
                 this.dialog=true
             },
-            edit(category,index){
-                this.form.name=category.name
-                this.editSlug=category.slug
+            edit(category){
                 this.editMode=true
                 this.categoryDialog=true
+                console.log(category)
+                this.$nextTick(()=>{
+                    this.$refs.categoryForm.setCategoryName(category)
+                })
+
+                //EventBus.$emit('setCategoryName',category)
+                //this.categoryName=category.name
+                //this.editSlug=category.slug
+
+
                 //this.categories.splice(index,1)
                //console.log([...new Set(this.categories)]) //.splice(index,1)
 
@@ -190,9 +201,9 @@
                 return [...new Map(arr.map(item => [item[key], item])).values()]
             },
             closeModal(){
+                console.log('createCategory')
                 this.categoryDialog = false
                 this.editMode=false
-                this.$refs.categoryForm.reset()
             }
 
         }

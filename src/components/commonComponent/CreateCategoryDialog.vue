@@ -78,7 +78,7 @@
                 this.$emit('create',this.form)
                 setTimeout(()=>{
                     this.$refs.categoryFormDialog.reset()
-                },1000)
+                },10)
             },
             closeModal() {
                // console.log('createCategorydd')

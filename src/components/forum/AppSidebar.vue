@@ -5,7 +5,7 @@
         </v-toolbar>
         <v-list class="pa-3" tile>
             <v-list-item-content v-for="category in categories" :key="category.id">
-                <v-list-item-title>{{category.name}}}</v-list-item-title>
+                <v-list-item-title>{{category.name}}</v-list-item-title>
             </v-list-item-content>
         </v-list>
     </v-card>

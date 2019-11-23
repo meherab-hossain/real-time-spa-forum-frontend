@@ -11,7 +11,10 @@
                 :data="singleQuestion"
         />
 
-        <FetchReplies :replies="singleQuestion.replies"></FetchReplies>
+        <div v-if="!editing">
+            <FetchReplies :question="singleQuestion"></FetchReplies>
+            <NewReply :questionSlug="singleQuestion.slug"></NewReply>
+        </div>
 
     </div>
 </template>
@@ -20,10 +23,11 @@
     import EditQuestion from "./EditQuestion";
     import ShowSingleQuestion from "./ShowSingleQuestion";
     import FetchReplies from "../reply/FetchReplies";
+    import NewReply from "../reply/NewReply";
     import EventBus from "../Mixins/EventBus";
     export default {
         name: "FetchSingleQuestion",
-        components: {EditQuestion, ShowSingleQuestion,FetchReplies},
+        components: {EditQuestion, ShowSingleQuestion,FetchReplies,NewReply},
         data(){
             return{
                 singleQuestion:{},

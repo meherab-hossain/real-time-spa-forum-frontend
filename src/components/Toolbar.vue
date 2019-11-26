@@ -5,37 +5,24 @@
                 <v-toolbar-title>Forum Page</v-toolbar-title>
 
                 <v-spacer></v-spacer>
-                <!-- <router-link tag="span" to="/forum">
-                     <v-btn text> Forum</v-btn>
-                 </router-link>
-                 <router-link tag="span" to="/forum" v-if="shows">
-                     <v-btn text>Ask Question</v-btn>
-                 </router-link>
-                 <router-link tag="span" to="/forum" v-if="shows">
-                     <v-btn text>Category</v-btn>
-                 </router-link>
-                 <router-link tag="span" to="/forum" v-if="!shows">
-                     <v-btn text>Logged in</v-btn>
-                 </router-link>
-                 <router-link tag="span" to="/forum" v-if="shows">
-                     <v-btn text>Logged out</v-btn>
-                 </router-link>-->
+                <AppNotification v-if="isLogged"></AppNotification>
+                <div>
+                    <template v-if="isLogged">
+                        <template v-for="item in authMenu">
+                            <v-btn text :key="item.title" :to="item.to">
+                                {{item.title}}
 
-                <template v-if="isLogged">
-                    <template v-for="item in authMenu">
-                        <v-btn text :key="item.title" :to="item.to">
-                            {{item.title}}
-
-                        </v-btn>
+                            </v-btn>
+                        </template>
                     </template>
-                </template>
-                <template v-if="!isLogged">
-                    <template v-for="item in unAuthMenu">
-                        <v-btn text :key="item.title" :to="item.to">
-                            {{item.title}}
-                        </v-btn>
+                    <template v-if="!isLogged">
+                        <template v-for="item in unAuthMenu">
+                            <v-btn text :key="item.title" :to="item.to">
+                                {{item.title}}
+                            </v-btn>
+                        </template>
                     </template>
-                </template>
+                </div>
             </v-toolbar>
         </v-card>
     </div>
@@ -45,9 +32,11 @@
     import User from "./Mixins/User";
     import EventBus from "./Mixins/EventBus";
     import AppStorage from "./Mixins/AppStorage";
+    import AppNotification from "./AppNotification";
 
     export default {
         name: "AppHome",
+        components: {AppNotification},
         mixins: [User,AppStorage],
         data() {
             return {

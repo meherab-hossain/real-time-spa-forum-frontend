@@ -39,7 +39,7 @@
             },
             newReplyListener(){
                 EventBus.$on('newReply',(data)=>{
-                    console.log(data)
+                    //console.log(data)
                     //this.question.replies.push(data)
                     this.content.unshift(data)
 
@@ -48,12 +48,12 @@
                 },
             deleteReplyListener(){
                 EventBus.$on('deleteReply',(index)=>{
-                    console.log(index,this.question.slug,this.content[index].id)
+                   // console.log(index,this.question.slug,this.content[index].id)
                     this.$axios.delete("http://127.0.0.1:8000/api/question/"+
                     this.question.slug+'/reply/'+
                     this.content[index].id)
                         .then((res)=>{
-                            console.log(res);
+                            //console.log(res);
                             this.content.splice(index,1)
                         })
 

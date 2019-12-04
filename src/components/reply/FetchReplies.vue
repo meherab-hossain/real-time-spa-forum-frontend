@@ -18,6 +18,7 @@
 
     import ShowReply from "./ShowReply";
     import EventBus from "../Mixins/EventBus";
+    import User from "../Mixins/User";
 
     export default {
         name: "FetchReplies",
@@ -28,10 +29,15 @@
               content:null
           }
         },
+        mixins:[User],
         components: {ShowReply},
         created() {
             this.newReplyListener()
             this.deleteReplyListener()
+            /*Echo.private('App.User.' + this.userId())
+                .notification((notification) => {
+                    console.log(notification.type);
+                });*/
         },
         methods:{
             getReplies(){
@@ -59,6 +65,7 @@
 
                 })
             },
+
 
 
             },

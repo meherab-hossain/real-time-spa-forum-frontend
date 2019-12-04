@@ -30,6 +30,7 @@
     /* eslint-disable */
 
     import User from "./Mixins/User";
+    import Exception from "./Mixins/Exception";
 
     export default {
         data() {
@@ -39,7 +40,7 @@
                 unreadCount: 0
             }
         },
-        mixins: [User],
+        mixins: [User,Exception],
         created() {
             if (this.loggedIn()) {
                 this.getNotifications()
@@ -54,6 +55,7 @@
                         this.unread = res.data.unread
                         this.unreadCount = res.data.unread.length
                     })
+                    .catch(error => this.handles(error))
             },
             readIt(notification){
                 this.$axios.post('http://127.0.0.1:8000/api/markAsRead',{id:notification.id})

@@ -24,7 +24,20 @@ export default {
 
         },
         decode(payload){
-            return JSON.parse(atob(payload))
+           if(this.isBase64(payload)){
+               return JSON.parse(atob(payload))
+           }else
+           {
+               return false
+           }
         },
+        isBase64(str){
+            try {
+                return btoa(atob(str).replace(/=/g,"")===str)
+            }
+            catch (e) {
+                return false
+            }
+        }
     }
 }

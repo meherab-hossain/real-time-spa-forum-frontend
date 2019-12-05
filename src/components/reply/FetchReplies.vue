@@ -1,6 +1,6 @@
 <template>
     <!--v-if="question.replies"-->
-    <div class="pl-4 ma-3">
+    <div class="pl-4 ma-3" >
         <ShowReply
                 v-for="(reply,index) in content"
                 :index="index"

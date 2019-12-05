@@ -40,6 +40,7 @@ export default {
         },
         loggedOut() {
             return this.clear()
+            window.location='/forum'
         },
         userName() {
             if (this.loggedIn()) {

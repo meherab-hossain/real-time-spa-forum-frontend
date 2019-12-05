@@ -10,7 +10,10 @@ export default {
         isExpired(error){
             if(error === 'Token is expired'){
                 this.loggedOut()
+            }else if (error === 'Token is invalid get a new one'){
+                this.loggedOut()
             }
+
         }
     }
 }

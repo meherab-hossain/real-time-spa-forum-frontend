@@ -13,7 +13,10 @@
 
         <div v-if="!editing">
             <FetchReplies :question="singleQuestion"></FetchReplies>
-            <NewReply :questionSlug="singleQuestion.slug"></NewReply>
+            <NewReply v-if="logIn" :questionSlug="singleQuestion.slug"></NewReply>
+            <div class="pl-4 ma-3 mt-3" v-else>
+                <router-link to="/login">Reply to login</router-link>
+            </div>
         </div>
 
     </div>
@@ -25,6 +28,7 @@
     import FetchReplies from "../reply/FetchReplies";
     import NewReply from "../reply/NewReply";
     import EventBus from "../Mixins/EventBus";
+    import User from "../Mixins/User";
     export default {
         name: "FetchSingleQuestion",
         components: {EditQuestion, ShowSingleQuestion,FetchReplies,NewReply},
@@ -33,6 +37,12 @@
                 singleQuestion:{},
                 editing:false
             }
+        },
+        mixins:[User],
+        computed:{
+          logIn(){
+              return this.loggedIn()
+          }
         },
         created() {
             this.editlistener()

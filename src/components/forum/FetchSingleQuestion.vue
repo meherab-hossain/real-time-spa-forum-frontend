@@ -8,7 +8,7 @@
 
         <ShowSingleQuestion
                 v-else
-                :data="singleQuestion"
+                :singleQuestion="singleQuestion"
         />
 
         <div v-if="!editing">
@@ -23,6 +23,8 @@
 </template>
 
 <script>
+    /* eslint-disable */
+
     import EditQuestion from "./EditQuestion";
     import ShowSingleQuestion from "./ShowSingleQuestion";
     import FetchReplies from "../reply/FetchReplies";
@@ -48,18 +50,20 @@
             this.editlistener()
             this.$axios.get(`http://127.0.0.1:8000/api/question/${this.$route.params.slug}`)
                 .then(res=>{
+
                     this.singleQuestion=res.data.data
+                    console.log(this.singleQuestion)
                 })
         },
-        methods:{
-             editlistener(){
-                 EventBus.$on('startEditing',()=>{
-                     this.editing=true
-                 }),
-                 EventBus.$on('cancelEditing',()=>{
-                     this.editing=false
-                 })
-             }
+        methods: {
+            editlistener() {
+                EventBus.$on('startEditing', () => {
+                    this.editing = true
+                }),
+                    EventBus.$on('cancelEditing', () => {
+                        this.editing = false
+                    })
+            }
         }
     }
 </script>

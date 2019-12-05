@@ -3,15 +3,15 @@
         <v-col>
             <v-card class="mx-auto">
                 <v-card-title class="headline mb-0">
-                    {{data.title}}
+                    {{content.title}}
                     <v-spacer></v-spacer>
-                    <v-btn class="teal">{{data.reply_count}}</v-btn>
+                    <v-btn class="teal">{{content.reply_count}}</v-btn>
                 </v-card-title>
 
                 <v-card-subtitle>
-                    {{data.user}} said {{data.created_at}}
+                    {{content.user}} said {{content.created_at}}
                 </v-card-subtitle>
-                <v-card-text v-html="data.body">
+                <v-card-text v-html="content.body">
                 </v-card-text>
                 <v-card-actions v-if="isUserQuestion">
                     <v-btn icon small @click="edit">
@@ -33,18 +33,22 @@
 
     export default {
         name: "ShowSingleQuestion",
-        props: ['data'],
+        props:{
+            singleQuestion:{
+                type:Object
+            }
+        },
         data() {
             return {
-                replyNumber: null
+                content:null
             }
         },
         computed: {
             /*body(){
-                return md.parse(this.data.body)
+                return md.parse(this.singleQuestion.body)
             }*/
             isUserQuestion() {
-                if (this.userId() === this.data.user_id) {
+                if (this.userId() === this.singleQuestion.user_id) {
                     return true
                 } else {
                     return false
@@ -52,6 +56,14 @@
             }
         },
         mixins: [User],
+        created(){
+            EventBus.$on('newReply',()=>{
+                this.content.reply_count++
+            })
+            EventBus.$on('deleteReply',()=>{
+                this.content.reply_count--
+            })
+        },
         methods: {
             destroy() {
                 this.$axios.delete(`http://127.0.0.1:8000/api/question/${this.$route.params.slug}`)
@@ -59,10 +71,22 @@
                     .then(res =>
                             this.$router.push('/forum')
                         // eslint-disable-next-line no-console
-                    ).catch(error => console.log(error.response.data))
+                    ).catch(error => console.log(error.response.singleQuestion))
             },
             edit() {
                 EventBus.$emit('startEditing')
+            },
+            getQuestion(){
+                this.content=this.singleQuestion
+            },
+        },
+        watch:{
+            singleQuestion:{
+                handler(){
+                    this.getQuestion()
+                },
+                deep:true,
+                immediate:true
             }
         }
     }

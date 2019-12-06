@@ -21,6 +21,7 @@
             <vue-simplemde v-model="form.body" ref="markdownEditor" />
 
             <v-btn
+                    :disabled="validation"
                     color="green"
                     type="submit"
             >Create</v-btn>
@@ -45,6 +46,15 @@
         },
         created(){
             this.categoryFetch()
+        },
+        computed:{
+            validation(){
+                if (!(this.form.title && this.form.body && this.form.category_id)){
+                    return true
+                }else{
+                    return false
+                }
+            }
         },
         methods:{
             create(){

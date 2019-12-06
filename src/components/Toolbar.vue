@@ -1,7 +1,7 @@
 <template>
     <div>
         <v-card height="60px" flat tile color="gray-light-4">
-            <v-toolbar dense>
+            <v-toolbar dark color="indigo darken-1">
                 <v-toolbar-title>Forum Page</v-toolbar-title>
 
                 <v-spacer></v-spacer>

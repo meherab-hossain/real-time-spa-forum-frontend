@@ -1,6 +1,13 @@
 <template>
     <div class="pl-4 ma-3 mt-3">
-        <vue-simplemde  v-model="body" ref="markdownEditor" />
+        <v-text-field
+                v-model="body"
+                label="Add a comment..."
+                filled
+                rounded
+                dense
+        ></v-text-field>
+       <!-- <vue-simplemde  v-model="body" ref="markdownEditor" />-->
         <v-btn icon small @click="submit">
             <v-icon color="green">reply</v-icon>
         </v-btn>

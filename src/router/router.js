@@ -8,6 +8,7 @@ import Logout from "../components/login/Logout";
 import FetchSingleQuestion from "../components/forum/FetchSingleQuestion";
 import AskQuestion from "../components/forum/AskQuestion";
 import CreateCategory from "../components/category/CreateCategory";
+import Parrallex from "../components/forum/Parrallex";
 
 
 Vue.use(Router)
@@ -16,11 +17,11 @@ export default new Router({
     mode: 'history',
     base: process.env.BASE_URL,
     routes: [
-        /*{
+        {
             path: '/',
-            name: 'forum',
-            component: Forum
-        },*/
+            name: 'parrallex',
+            component: Parrallex
+        },
         {
             path: '/login',
             name: 'login',

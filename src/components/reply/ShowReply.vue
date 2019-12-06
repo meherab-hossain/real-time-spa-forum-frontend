@@ -2,7 +2,7 @@
     <div class="mt-3">
         <v-flex class="mt-2">
             <v-card>
-                <v-card-title class="pa-0">
+                <v-card-title  class="pa-0">
                     <div>
                         <v-card-title>{{data.user_name}}</v-card-title>
                         <v-card-subtitle>said {{data.created_at}}</v-card-subtitle>

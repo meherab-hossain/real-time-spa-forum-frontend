@@ -2,7 +2,9 @@
     <div>
         <v-card height="60px" flat tile color="gray-light-4">
             <v-toolbar dark color="indigo darken-1">
-                <v-toolbar-title>Forum Page</v-toolbar-title>
+                <v-toolbar-title>
+                    <router-link to="/">Forum Page</router-link>
+                </v-toolbar-title>
 
                 <v-spacer></v-spacer>
                 <AppNotification v-if="isLogged"></AppNotification>

@@ -9,6 +9,14 @@
                    >
 
                    </Question>
+                   <div class="text-xs-center mt-2">
+                       <v-pagination
+                               v-model="meta.current_page"
+                               :length="meta.last_page"
+                               @input="changePage"
+                               circle
+                       ></v-pagination>
+                   </div>
                </v-flex>
                <v-flex xs4>
                    <AppSidebar></AppSidebar>
@@ -28,15 +36,26 @@
         components: {Question, AppSidebar},
         data(){
             return{
-                questions:{}
+                questions:{},
+                meta:{}
             }
         },
         created() {
-            this.$axios.get('http://127.0.0.1:8000/api/question')
-                .then(res=>{
-                    this.questions=res.data.data
-                })
-                .catch(error => console.log(error.response.data))
+            this.fetchQuestions()
+        },
+        methods:{
+            fetchQuestions(page){
+                let url = page ? `http://127.0.0.1:8000/api/question?page=${page}`: 'http://127.0.0.1:8000/api/question'
+                this.$axios.get(url)
+                    .then(res=>{
+                        this.questions=res.data.data
+                        this.meta=res.data.meta
+                    })
+                    .catch(error => console.log(error.response.data))
+            },
+            changePage(page){
+                this.fetchQuestions(page)
+            }
         }
     }
 </script>

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-form  @submit.prevent="login">
+        <v-form @submit.prevent="login">
             <v-container>
                 <v-row>
                     <v-col cols="12" md="4">
@@ -22,7 +22,7 @@
                 </v-row>
                 <v-row>
                     <v-col cols="12" md="1">
-                        <v-btn color="green" type="submit">
+                        <v-btn :disabled="validation" color="green" type="submit">
                             Login
                         </v-btn>
                     </v-col>
@@ -39,29 +39,36 @@
 
 <script>
     import user from '../Mixins/User'
+
     export default {
         name: "Login",
-        data(){
-            return{
-                form:{
-                    email:null,
-                    password:null
+        data() {
+            return {
+                form: {
+                    email: null,
+                    password: null
                 },
             }
         },
-        mixins:[user],
-        created(){
+        mixins: [user],
+        created() {
             if (this.loggedIn()) {
                 this.$router.push('/forum')
             }
         },
-        computed:{
-
-        },
-        methods:{
-            login(){
-                this.user(this.form)
+        computed: {
+            validation() {
+                if (!(this.form.email && this.form.password)) {
+                    return true
+                } else {
+                    return false
                 }
+            }
+        },
+        methods: {
+            login() {
+                this.user(this.form)
+            }
         }
     }
 </script>
